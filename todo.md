@@ -1,7 +1,8 @@
-# Enhancement Tasks
+# GitHub Publishing Checklist
 
-- [x] Add a full-screen surprise-box reveal overlay that plays whenever a chapter is opened.
-- [x] Give each chapter a distinct message presentation and stylish typography treatment.
-- [x] Add reusable confetti and falling-rose effects to the reveal sequence.
-- [x] Preserve keyboard access, mobile responsiveness, and reduced-motion behavior.
-- [x] Type-check, build, visually verify, and save an updated checkpoint.
+- [x] Inspect the target GitHub repository and current local Git state.
+- [ ] Replace the empty README with complete setup and Vercel documentation.
+- [ ] Confirm no secrets or generated build artifacts will be committed.
+- [ ] Create a clean commit containing the complete frontend project.
+- [ ] Push the commit to the requested GitHub remote.
+- [ ] Verify the remote branch and provide Vercel import settings.
