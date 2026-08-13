@@ -184,3 +184,59 @@ button:active { transform: scale(0.97); }
   .chapter-rail > div:first-of-type { overflow-x: auto; padding-bottom: 6px; }
   .chapter-rail button { flex: 0 0 auto; }
 }
+
+/* Cinematic reveal layer: an opening keepsake box gives every chapter its own emotional beat. */
+.surprise-overlay { position: fixed; z-index: 80; inset: 0; display: grid; place-items: center; overflow: hidden; padding: 2rem 1.25rem; background: rgba(44, 28, 33, 0.84); backdrop-filter: blur(12px); }
+.surprise-overlay::before { content: ""; position: absolute; inset: 0; opacity: 0.16; background-image: radial-gradient(#fff9f2 0.8px, transparent 0.8px); background-size: 8px 8px; pointer-events: none; }
+.surprise-box { position: absolute; left: 50%; top: 58%; width: min(510px, 85vw); height: min(370px, 50vw); transform: translate(-50%, -50%); opacity: 0.46; filter: blur(0.3px); }
+.surprise-body { position: absolute; left: 15%; right: 15%; bottom: 5%; height: 45%; border: 1px solid rgba(246, 205, 189, 0.3); border-radius: 8px 8px 22px 22px; background: linear-gradient(135deg, #a53f5c, #d96d82); box-shadow: 0 24px 70px rgba(242, 166, 169, 0.35); }
+.surprise-body i { position: absolute; left: 43%; width: 14%; top: 0; bottom: 0; background: #f6cdbd; opacity: 0.78; }
+.surprise-body i:last-child { left: auto; right: 43%; opacity: 0.45; }
+.surprise-lid { position: absolute; z-index: 2; left: 10%; right: 10%; top: 31%; height: 18%; border-radius: 10px; border: 1px solid rgba(246, 205, 189, 0.35); background: #e58492; transform-origin: 12% 90%; animation: lid-open 1.15s cubic-bezier(0.23, 1, 0.32, 1) forwards; box-shadow: 0 10px 20px rgba(44, 28, 33, 0.2); }
+.surprise-lid i { position: absolute; top: 0; bottom: 0; left: 43%; width: 14%; background: #f6cdbd; }
+.surprise-lid i:last-child { left: auto; right: 43%; opacity: 0.45; }
+.surprise-glow { position: absolute; left: 28%; right: 28%; top: 12%; height: 40%; border-radius: 50%; background: #f6cdbd; filter: blur(45px); opacity: 0; animation: box-glow 1.2s ease-out 0.35s forwards; }
+@keyframes lid-open { 0% { transform: rotate(0) translateY(0); } 45% { transform: rotate(-16deg) translate(-5%, -28%); } 100% { transform: rotate(-28deg) translate(-12%, -42%); } }
+@keyframes box-glow { 0% { opacity: 0; transform: scale(0.6); } 45% { opacity: 0.85; transform: scale(1.25); } 100% { opacity: 0.42; transform: scale(1); } }
+.rose-rain { position: absolute; inset: 0; pointer-events: none; }
+.rose-rain span { position: absolute; top: -2rem; color: #f6cdbd; font-family: Georgia, serif; font-size: clamp(1.1rem, 2vw, 2rem); text-shadow: 0 2px 8px rgba(242, 166, 169, 0.45); }
+.reveal-message { position: relative; z-index: 4; width: min(640px, 92vw); padding: clamp(2rem, 6vw, 4.5rem); text-align: center; color: #fff9f2; border: 1px solid rgba(255, 249, 242, 0.22); background: rgba(44, 28, 33, 0.45); box-shadow: 0 30px 80px rgba(44, 28, 33, 0.28); backdrop-filter: blur(8px); animation: message-arrive 0.75s cubic-bezier(0.23, 1, 0.32, 1) 0.2s both; }
+.reveal-message::before, .reveal-message::after { content: "✦"; position: absolute; color: #f6cdbd; font-size: 1.25rem; }
+.reveal-message::before { top: 1.2rem; left: 1.4rem; }
+.reveal-message::after { right: 1.4rem; bottom: 1.2rem; }
+@keyframes message-arrive { from { opacity: 0; transform: translateY(24px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+.reveal-eyebrow { margin: 0; font-family: "Manrope", sans-serif; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.22em; text-transform: uppercase; color: #f6cdbd; }
+.reveal-message h2 { margin: 1rem 0 0; font-size: clamp(2.5rem, 6vw, 5rem); line-height: 0.94; letter-spacing: -0.045em; }
+.reveal-rule { display: flex; align-items: center; justify-content: center; gap: 0.8rem; margin: 1.6rem auto; color: #f6cdbd; }
+.reveal-rule i { width: 90px; height: 1px; background: rgba(246, 205, 189, 0.6); }
+.reveal-copy { margin: 0 auto; max-width: 33rem; font-family: "Manrope", sans-serif; font-size: clamp(1rem, 2vw, 1.2rem); line-height: 1.8; color: rgba(255, 249, 242, 0.87); }
+.reveal-signoff { margin: 1.5rem 0 0; color: #f6cdbd; font-family: "DM Serif Display", Georgia, serif; font-size: 1.35rem; font-style: italic; }
+.reveal-close { display: inline-flex; align-items: center; gap: 0.6rem; margin-top: 2rem; border: 1px solid rgba(246, 205, 189, 0.48); border-radius: 999px; padding: 0.8rem 1.1rem; color: #fff9f2; background: rgba(185, 78, 104, 0.6); font-family: "Manrope", sans-serif; font-size: 0.75rem; font-weight: 800; transition: 200ms ease-out; }
+.reveal-close:hover { transform: translateY(-2px); background: #b94e68; }
+.surprise-dismiss { position: absolute; z-index: 5; right: 1.4rem; top: 1rem; border: 0; color: rgba(255, 249, 242, 0.7); background: transparent; font-size: 2rem; line-height: 1; transition: 160ms ease-out; }
+.surprise-dismiss:hover { color: #fff9f2; transform: rotate(8deg); }
+.reveal-letter { border-radius: 4px 36px 4px 32px; transform: rotate(-1deg); }
+.reveal-letter h2 { font-family: "DM Serif Display", Georgia, serif; font-style: italic; color: #f6cdbd; }
+.reveal-photo { border-radius: 2px; transform: rotate(1deg); background: rgba(57, 34, 38, 0.48); }
+.reveal-photo h2 { font-family: "Manrope", sans-serif; font-weight: 800; text-transform: uppercase; letter-spacing: -0.06em; color: #fff9f2; }
+.reveal-pocket { border-radius: 26px; background: rgba(142, 61, 85, 0.62); }
+.reveal-pocket h2 { font-family: Georgia, serif; font-style: italic; color: #f6cdbd; }
+.reveal-note { border-radius: 4px; border-left: 5px solid #f6cdbd; background: rgba(255, 249, 242, 0.1); text-align: left; }
+.reveal-note .reveal-rule, .reveal-note .reveal-eyebrow { justify-content: flex-start; text-align: left; }
+.reveal-note h2 { font-family: "DM Serif Display", Georgia, serif; color: #fff9f2; }
+.reveal-finale { border-radius: 50%; padding: clamp(3rem, 8vw, 6rem); background: rgba(185, 78, 104, 0.66); }
+.reveal-finale h2 { font-family: "DM Serif Display", Georgia, serif; font-style: italic; color: #fff9f2; }
+
+@media (max-width: 640px) {
+  .surprise-overlay { padding: 1rem; }
+  .surprise-box { top: 75%; width: 110vw; opacity: 0.28; }
+  .reveal-message { max-height: 88svh; overflow-y: auto; }
+  .reveal-finale { border-radius: 28px; }
+  .reveal-note { text-align: center; }
+  .reveal-note .reveal-rule, .reveal-note .reveal-eyebrow { justify-content: center; text-align: center; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .surprise-lid, .surprise-glow, .reveal-message { animation: none; }
+  .surprise-lid { transform: rotate(-28deg) translate(-12%, -42%); }
+  .surprise-glow { opacity: 0.42; }
+}
