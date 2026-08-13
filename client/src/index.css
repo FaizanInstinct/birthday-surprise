@@ -1,3 +1,7 @@
+/*
+ * Paper Moon Keepsake direction: warm parchment, Nylo Rose accents, tactile layers, and restrained motion.
+ * Global tokens and handcrafted object styles for the birthday journey.
+ */
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -27,151 +31,156 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
+  --color-nylo-paper: #fbf5ec;
+  --color-nylo-ink: #2c1c21;
+  --color-nylo-rose: #b94e68;
+  --color-nylo-berry: #8e3d55;
+  --color-nylo-blush: #f8e2df;
+  --color-nylo-peach: #f6cdbd;
 }
 
 :root {
-  --primary: var(--color-blue-700);
-  --primary-foreground: var(--color-blue-50);
-  --sidebar-primary: var(--color-blue-600);
-  --sidebar-primary-foreground: var(--color-blue-50);
-  --chart-1: var(--color-blue-300);
-  --chart-2: var(--color-blue-500);
-  --chart-3: var(--color-blue-600);
-  --chart-4: var(--color-blue-700);
-  --chart-5: var(--color-blue-800);
-  --radius: 0.65rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.235 0.015 65);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.235 0.015 65);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.235 0.015 65);
-  --secondary: oklch(0.98 0.001 286.375);
-  --secondary-foreground: oklch(0.4 0.015 65);
-  --muted: oklch(0.967 0.001 286.375);
-  --muted-foreground: oklch(0.552 0.016 285.938);
-  --accent: oklch(0.967 0.001 286.375);
-  --accent-foreground: oklch(0.141 0.005 285.823);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.92 0.004 286.32);
-  --input: oklch(0.92 0.004 286.32);
-  --ring: oklch(0.623 0.214 259.815);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.235 0.015 65);
-  --sidebar-accent: oklch(0.967 0.001 286.375);
-  --sidebar-accent-foreground: oklch(0.141 0.005 285.823);
-  --sidebar-border: oklch(0.92 0.004 286.32);
-  --sidebar-ring: oklch(0.623 0.214 259.815);
+  --primary: #b94e68;
+  --primary-foreground: #fff9f2;
+  --sidebar-primary: #b94e68;
+  --sidebar-primary-foreground: #fff9f2;
+  --chart-1: #b94e68;
+  --chart-2: #f2a6a9;
+  --chart-3: #e68b6b;
+  --chart-4: #8e3d55;
+  --chart-5: #2c1c21;
+  --radius: 0.75rem;
+  --background: #fbf5ec;
+  --foreground: #2c1c21;
+  --card: #fff9f2;
+  --card-foreground: #2c1c21;
+  --popover: #fff9f2;
+  --popover-foreground: #2c1c21;
+  --secondary: #f8e2df;
+  --secondary-foreground: #2c1c21;
+  --muted: #f5e8de;
+  --muted-foreground: #7e6269;
+  --accent: #f6cdbd;
+  --accent-foreground: #2c1c21;
+  --destructive: #a33e4f;
+  --destructive-foreground: #fff9f2;
+  --border: rgba(185, 78, 104, 0.15);
+  --input: rgba(185, 78, 104, 0.2);
+  --ring: #8e3d55;
+  --sidebar: #fff9f2;
+  --sidebar-foreground: #2c1c21;
+  --sidebar-accent: #f8e2df;
+  --sidebar-accent-foreground: #2c1c21;
+  --sidebar-border: rgba(185, 78, 104, 0.15);
+  --sidebar-ring: #8e3d55;
 }
 
-.dark {
-  --primary: var(--color-blue-700);
-  --primary-foreground: var(--color-blue-50);
-  --sidebar-primary: var(--color-blue-500);
-  --sidebar-primary-foreground: var(--color-blue-50);
-  --background: oklch(0.141 0.005 285.823);
-  --foreground: oklch(0.85 0.005 65);
-  --card: oklch(0.21 0.006 285.885);
-  --card-foreground: oklch(0.85 0.005 65);
-  --popover: oklch(0.21 0.006 285.885);
-  --popover-foreground: oklch(0.85 0.005 65);
-  --secondary: oklch(0.24 0.006 286.033);
-  --secondary-foreground: oklch(0.7 0.005 65);
-  --muted: oklch(0.274 0.006 286.033);
-  --muted-foreground: oklch(0.705 0.015 286.067);
-  --accent: oklch(0.274 0.006 286.033);
-  --accent-foreground:  oklch(0.92 0.005 65);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.488 0.243 264.376);
-  --chart-1: var(--color-blue-300);
-  --chart-2: var(--color-blue-500);
-  --chart-3: var(--color-blue-600);
-  --chart-4: var(--color-blue-700);
-  --chart-5: var(--color-blue-800);
-  --sidebar: oklch(0.21 0.006 285.885);
-  --sidebar-foreground: oklch(0.85 0.005 65);
-  --sidebar-accent: oklch(0.274 0.006 286.033);
-  --sidebar-accent-foreground:  oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.488 0.243 264.376);
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  @apply bg-background text-foreground;
+  margin: 0;
+  min-width: 320px;
+  font-family: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  background-image: radial-gradient(rgba(185, 78, 104, 0.06) 0.65px, transparent 0.65px);
+  background-size: 7px 7px;
 }
+button, a { -webkit-tap-highlight-color: transparent; }
+button:active { transform: scale(0.97); }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-  button:not(:disabled),
-  [role="button"]:not([aria-disabled="true"]),
-  [type="button"]:not(:disabled),
-  [type="submit"]:not(:disabled),
-  [type="reset"]:not(:disabled),
-  a[href],
-  select:not(:disabled),
-  input[type="checkbox"]:not(:disabled),
-  input[type="radio"]:not(:disabled) {
-    @apply cursor-pointer;
-  }
+  * { @apply border-border outline-ring/50; }
+  button:not(:disabled), [role="button"]:not([aria-disabled="true"]), a[href] { @apply cursor-pointer; }
 }
 
 @layer components {
-  /**
-   * Custom container utility that centers content and adds responsive padding.
-   *
-   * This overrides Tailwind's default container behavior to:
-   * - Auto-center content (mx-auto)
-   * - Add responsive horizontal padding
-   * - Set max-width for large screens
-   *
-   * Usage: <div className="container">...</div>
-   *
-   * For custom widths, use max-w-* utilities directly:
-   * <div className="max-w-6xl mx-auto px-4">...</div>
-   */
-  .container {
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 1rem; /* 16px - mobile padding */
-    padding-right: 1rem;
-  }
+  .font-display { font-family: "DM Serif Display", Georgia, serif; }
+  .font-sans { font-family: "Manrope", ui-sans-serif, system-ui, sans-serif; }
+  .container { width: 100%; margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem; }
+  .flex { min-height: 0; min-width: 0; }
+}
 
-  .flex {
-    min-height: 0;
-    min-width: 0;
-  }
+.envelope { position: relative; width: min(330px, 78vw); aspect-ratio: 1.38; filter: drop-shadow(0 24px 20px rgba(117, 54, 67, 0.15)); }
+.envelope-shadow { position: absolute; inset: 14% 4% -8%; border-radius: 50%; background: rgba(117, 54, 67, 0.15); filter: blur(12px); }
+.envelope-paper { position: absolute; inset: 0; overflow: hidden; border: 1px solid rgba(142, 61, 85, 0.12); border-radius: 10px; background: #fff9f2; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.7); }
+.envelope-paper::before { content: ""; position: absolute; inset: 0; opacity: 0.3; background: repeating-linear-gradient(0deg, transparent 0 4px, rgba(185, 78, 104, 0.06) 5px); }
+.envelope-flap { position: absolute; z-index: 4; left: -5%; top: -52%; width: 110%; height: 100%; border-radius: 13px; border: 1px solid rgba(142, 61, 85, 0.12); background: #f5c7c5; transform: rotate(45deg) skew(-5deg, -5deg); transform-origin: center bottom; transition: transform 600ms cubic-bezier(0.23, 1, 0.32, 1); }
+.envelope.is-open .envelope-flap { transform: rotate(45deg) skew(-5deg, -5deg) translateY(-55%); }
+.envelope-fold { position: absolute; bottom: -1%; z-index: 3; width: 74%; height: 88%; background: #f8e2df; }
+.envelope-fold-left { left: -35%; transform: rotate(42deg); }
+.envelope-fold-right { right: -35%; transform: rotate(-42deg); }
+.envelope-letter { position: absolute; z-index: 2; left: 12%; right: 12%; bottom: 8%; height: 70%; display: flex; align-items: center; justify-content: center; color: #b94e68; border: 1px solid rgba(185, 78, 104, 0.1); background: #fffdf9; transition: transform 500ms cubic-bezier(0.23, 1, 0.32, 1); }
+.envelope.is-open .envelope-letter { transform: translateY(-30%); }
+.envelope-seal { position: absolute; z-index: 6; bottom: 40%; left: 50%; display: flex; height: 48px; width: 48px; align-items: center; justify-content: center; transform: translate(-50%, 50%); border-radius: 50%; color: #fff9f2; background: #b94e68; box-shadow: 0 7px 14px rgba(142, 61, 85, 0.2); }
+.envelope-small { width: 100%; }
+.envelope-small .envelope-seal { height: 32px; width: 32px; }
 
-  @media (min-width: 640px) {
-    .container {
-      padding-left: 1.5rem; /* 24px - tablet padding */
-      padding-right: 1.5rem;
-    }
-  }
+.wrapped-gift { position: relative; width: min(300px, 70vw); aspect-ratio: 1.05; filter: drop-shadow(0 24px 20px rgba(117, 54, 67, 0.16)); }
+.gift-shadow { position: absolute; left: 4%; right: 4%; bottom: 4%; height: 20%; border-radius: 50%; background: rgba(117, 54, 67, 0.18); filter: blur(12px); }
+.gift-body { position: absolute; left: 10%; right: 10%; bottom: 7%; height: 56%; border-radius: 5px 5px 12px 12px; border: 1px solid rgba(142, 61, 85, 0.15); background: #c75c74; overflow: hidden; }
+.gift-body::after { content: ""; position: absolute; inset: 0; opacity: 0.22; background: repeating-linear-gradient(90deg, transparent 0 12px, rgba(255, 255, 255, 0.18) 13px 14px); }
+.gift-body > span:first-child, .gift-body > span:last-child, .gift-lid > span:first-child, .gift-lid > span:last-child { position: absolute; z-index: 2; left: 45%; width: 16%; background: #f6cdbd; }
+.gift-body > span:first-child, .gift-body > span:last-child { top: 0; bottom: 0; }
+.gift-lid { position: absolute; z-index: 3; left: 5%; right: 5%; top: 22%; height: 21%; border-radius: 7px; border: 1px solid rgba(142, 61, 85, 0.15); background: #dd7186; transition: transform 500ms cubic-bezier(0.23, 1, 0.32, 1); }
+.gift-lid > span:first-child, .gift-lid > span:last-child { top: 0; bottom: 0; }
+.gift-lid > span:last-child, .gift-body > span:last-child { left: auto; right: 45%; opacity: 0.65; }
+.wrapped-gift.is-open .gift-lid { transform: translateY(-62%) rotate(-4deg); }
+.gift-bow { position: absolute; z-index: 4; top: 4%; left: 50%; transform: translateX(-50%); }
+.gift-bow::after { content: ""; position: absolute; left: 50%; top: 32%; height: 34px; width: 27px; transform: translateX(-50%); border-radius: 50%; background: #f6cdbd; }
+.gift-bow i { display: block; position: absolute; top: 0; width: 60px; height: 40px; border: 9px solid #f6cdbd; }
+.gift-bow i:first-child { right: 2px; border-radius: 100% 0 100% 0; transform: rotate(18deg); }
+.gift-bow i:last-child { left: 2px; border-radius: 0 100% 0 100%; transform: rotate(-18deg); }
+.gift-tag { position: absolute; z-index: 5; right: 4%; top: 43%; padding: 8px 10px; transform: rotate(7deg); background: #fff9f2; color: #8e3d55; font-family: "DM Serif Display", Georgia, serif; font-size: 14px; line-height: 0.9; box-shadow: 4px 5px 0 rgba(142, 61, 85, 0.12); }
+.gift-tag b { font-size: 18px; }
 
-  @media (min-width: 1024px) {
-    .container {
-      padding-left: 2rem; /* 32px - desktop padding */
-      padding-right: 2rem;
-      max-width: 1280px; /* Standard content width */
-    }
-  }
+@media (max-width: 640px) {
+  .envelope { width: min(270px, 78vw); }
+  .wrapped-gift { width: min(250px, 70vw); }
+  .envelope-seal { height: 40px; width: 40px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
+
+/* Keepsake chapter objects: each stage should feel assembled from paper, not rendered as a generic card. */
+.keepsake-stage {
+  isolation: isolate;
+  border: 1px solid rgba(142, 61, 85, 0.14);
+  border-radius: 3px 22px 5px 18px;
+  background: #f8e2df;
+  box-shadow: 12px 16px 0 rgba(185, 78, 104, 0.07), 0 24px 30px rgba(117, 54, 67, 0.09);
+}
+.keepsake-stage::before {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  z-index: -1;
+  border: 1px dashed rgba(142, 61, 85, 0.18);
+  border-radius: 2px 17px 3px 13px;
+  background-image: radial-gradient(rgba(142, 61, 85, 0.12) 0.6px, transparent 0.6px);
+  background-size: 6px 6px;
+  opacity: 0.55;
+}
+.keepsake-stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  border-radius: inherit;
+  background: linear-gradient(115deg, transparent 0 46%, rgba(255, 255, 255, 0.22) 46.5% 47%, transparent 47.5%);
+  pointer-events: none;
+}
+.paper-tape { position: absolute; z-index: 20; width: 82px; height: 25px; opacity: 0.78; background: rgba(255, 249, 242, 0.63); box-shadow: 0 2px 5px rgba(117, 54, 67, 0.06); }
+.paper-tape-left { left: 20px; top: 18px; transform: rotate(-9deg); }
+.paper-tape-right { right: 20px; bottom: 18px; transform: rotate(8deg); }
+.chapter-rail { position: relative; }
+.chapter-rail::before { content: ""; position: absolute; left: 17px; top: 46px; bottom: 30px; width: 2px; background: repeating-linear-gradient(to bottom, rgba(185, 78, 104, 0.35) 0 8px, transparent 8px 15px); }
+.chapter-rail > p, .chapter-rail > div { position: relative; z-index: 1; }
+.chapter-rail button span:first-child { position: relative; box-shadow: 2px 3px 0 rgba(142, 61, 85, 0.08); }
+.chapter-rail button span:first-child::after { content: ""; position: absolute; inset: 3px; border: 1px dotted currentColor; border-radius: inherit; opacity: 0.35; }
+@media (max-width: 1023px) {
+  .chapter-rail::before { display: none; }
+  .chapter-rail > div:first-of-type { overflow-x: auto; padding-bottom: 6px; }
+  .chapter-rail button { flex: 0 0 auto; }
 }
