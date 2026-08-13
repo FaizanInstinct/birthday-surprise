@@ -3,6 +3,9 @@
  * This page owns the one-session gift journey; replace the copy in `chapters` to personalize it.
  */
 import { useMemo, useState } from "react";
+import heroImage from "../assets/nylo-hero.webp";
+import finaleImage from "../assets/nylo-finale.webp";
+import markImage from "../assets/nylo-mark.webp";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   ArrowRight,
@@ -15,10 +18,6 @@ import {
   Sparkles,
   Star,
 } from "lucide-react";
-
-const heroImage = "/manus-storage/nylo-hero_aff73a4b.png";
-const finaleImage = "/manus-storage/nylo-finale_1487b995.png";
-const markImage = "/manus-storage/nylo-mark_2ae3d220.png";
 
 const chapters = [
   {
