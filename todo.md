@@ -1,8 +1,7 @@
-# GitHub Publishing Checklist
+# Vercel Deployment Repair
 
-- [x] Inspect the target GitHub repository and current local Git state.
-- [x] Replace the empty README with complete setup and Vercel documentation.
-- [x] Confirm no secrets or generated build artifacts will be committed.
-- [x] Create a clean commit containing the complete frontend project.
-- [ ] Push the commit to the selected GitHub remote.
-- [ ] Verify the remote branch and provide Vercel import settings.
+- [ ] Inspect package scripts, Vite configuration, and Vercel-relevant files.
+- [ ] Add static-hosting configuration so Vercel serves the React build output.
+- [ ] Verify the production build and frontend output locally.
+- [ ] Commit and push the deployment fix to the GitHub main branch.
+- [ ] Provide the exact Vercel redeploy settings and steps.
