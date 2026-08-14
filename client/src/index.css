@@ -292,3 +292,12 @@ button:active { transform: scale(0.97); }
 /* Explicit local sound test control for diagnosing browser audio permissions. */
 .sound-test { position: relative; z-index: 4; margin-top: 0.75rem; border: 1px solid rgba(246, 205, 189, 0.45); border-radius: 999px; padding: 0.45rem 0.8rem; color: #f6cdbd; background: rgba(255, 249, 242, 0.08); font-family: "Manrope", sans-serif; font-size: 0.64rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; transition: background 180ms ease-out, transform 180ms ease-out; }
 .sound-test:hover { background: rgba(255, 249, 242, 0.18); transform: translateY(-1px); }
+
+/* Third-choice disappointment keepsake: small, sparse, playful falling words. */
+.sorry-rain { position: absolute; inset: -1rem 0 auto; height: 44vh; overflow: hidden; pointer-events: none; z-index: 0; }
+.sorry-rain span { position: absolute; top: -0.5rem; color: rgba(142, 61, 85, 0.42); font-family: "DM Serif Display", Georgia, serif; font-size: clamp(0.95rem, 2vw, 1.35rem); font-style: italic; letter-spacing: 0.04em; text-shadow: 0 4px 12px rgba(117, 54, 67, 0.1); }
+.sorry-rain span:nth-child(1) { left: 14%; }
+.sorry-rain span:nth-child(2) { left: 38%; color: rgba(185, 78, 104, 0.36); }
+.sorry-rain span:nth-child(3) { left: 66%; }
+.sorry-rain span:nth-child(4) { left: 84%; color: rgba(230, 139, 107, 0.42); }
+.wrong-choice > :not(.sorry-rain) { position: relative; z-index: 1; }
