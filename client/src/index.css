@@ -288,3 +288,7 @@ button:active { transform: scale(0.97); }
 
 /* Keep the three choice reveal compositions on the same heading-to-copy rhythm. */
 .choice-stage h2 + .choice-stage-hint { margin-top: 1.55rem; }
+
+/* Explicit local sound test control for diagnosing browser audio permissions. */
+.sound-test { position: relative; z-index: 4; margin-top: 0.75rem; border: 1px solid rgba(246, 205, 189, 0.45); border-radius: 999px; padding: 0.45rem 0.8rem; color: #f6cdbd; background: rgba(255, 249, 242, 0.08); font-family: "Manrope", sans-serif; font-size: 0.64rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; transition: background 180ms ease-out, transform 180ms ease-out; }
+.sound-test:hover { background: rgba(255, 249, 242, 0.18); transform: translateY(-1px); }

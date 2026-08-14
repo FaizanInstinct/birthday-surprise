@@ -113,25 +113,60 @@ function FloatingMarks({ count = 14 }: { count?: number }) {
   );
 }
 
-function playBirthdayTone(kind: "slice" | "pop" | "wrong") {
-  if (typeof window === "undefined") return;
+let birthdayAudioContext: AudioContext | null = null;
+
+function getBirthdayAudioContext() {
+  if (typeof window === "undefined") return null;
   const AudioContextClass = window.AudioContext || (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-  if (!AudioContextClass) return;
-  const context = new AudioContextClass();
-  const notes = kind === "slice" ? [392, 523, 659] : kind === "pop" ? [330, 440, 587] : [220, 175];
-  notes.forEach((frequency, index) => {
+  if (!AudioContextClass) return null;
+  birthdayAudioContext ??= new AudioContextClass();
+  return birthdayAudioContext;
+}
+
+type BirthdayTone = "slice" | "pop" | "wrong" | "test" | "unwrap-envelope" | "unwrap-memory" | "unwrap-choice" | "unwrap-gift" | "unwrap-finale";
+
+function playBirthdayTone(kind: BirthdayTone) {
+  const context = getBirthdayAudioContext();
+  if (!context) return;
+  void context.resume();
+  const palettes: Record<BirthdayTone, { notes: number[]; wave: OscillatorType; step: number; length: number; volume: number }> = {
+    slice: { notes: [392, 523, 659], wave: "sine", step: 0.1, length: 0.34, volume: 0.14 },
+    pop: { notes: [330, 440, 587], wave: "sine", step: 0.1, length: 0.34, volume: 0.14 },
+    wrong: { notes: [220, 175], wave: "triangle", step: 0.1, length: 0.34, volume: 0.14 },
+    test: { notes: [660], wave: "sine", step: 0.1, length: 0.34, volume: 0.18 },
+    "unwrap-envelope": { notes: [196, 247, 294, 392], wave: "triangle", step: 0.075, length: 0.28, volume: 0.11 },
+    "unwrap-memory": { notes: [294, 370, 440, 554], wave: "sine", step: 0.13, length: 0.42, volume: 0.105 },
+    "unwrap-choice": { notes: [262, 330, 392, 523, 659], wave: "square", step: 0.07, length: 0.22, volume: 0.075 },
+    "unwrap-gift": { notes: [165, 247, 330, 494, 659], wave: "sawtooth", step: 0.1, length: 0.38, volume: 0.07 },
+    "unwrap-finale": { notes: [262, 330, 392, 523, 659, 784], wave: "sine", step: 0.11, length: 0.5, volume: 0.12 },
+  };
+  const palette = palettes[kind];
+  const now = context.currentTime + 0.04;
+  palette.notes.forEach((frequency, index) => {
     const oscillator = context.createOscillator();
     const gain = context.createGain();
-    oscillator.type = kind === "wrong" ? "triangle" : "sine";
-    oscillator.frequency.value = frequency;
-    gain.gain.setValueAtTime(0.0001, context.currentTime + index * 0.08);
-    gain.gain.exponentialRampToValueAtTime(0.08, context.currentTime + index * 0.08 + 0.02);
-    gain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + index * 0.08 + 0.22);
+    const start = now + index * palette.step;
+    oscillator.type = palette.wave;
+    oscillator.frequency.setValueAtTime(frequency, start);
+    gain.gain.setValueAtTime(0.0001, start);
+    gain.gain.exponentialRampToValueAtTime(palette.volume, start + 0.025);
+    gain.gain.exponentialRampToValueAtTime(0.0001, start + palette.length);
     oscillator.connect(gain).connect(context.destination);
-    oscillator.start(context.currentTime + index * 0.08);
-    oscillator.stop(context.currentTime + index * 0.08 + 0.24);
+    oscillator.start(start);
+    oscillator.stop(start + palette.length + 0.02);
   });
-  window.setTimeout(() => void context.close(), 700);
+}
+
+function enableBirthdaySound() {
+  playBirthdayTone("test");
+}
+
+function unwrapToneForChapter(type: string): BirthdayTone {
+  if (type === "envelope") return "unwrap-envelope";
+  if (type === "memory") return "unwrap-memory";
+  if (type === "choice") return "unwrap-choice";
+  if (type === "gift") return "unwrap-gift";
+  return "unwrap-finale";
 }
 
 function CelebrationBurst({ message, subline, reduced }: { message: string; subline: string; reduced: boolean | null }) {
@@ -174,13 +209,13 @@ function ChoiceSurprise({ choice, onClose, reduced }: { choice: number; onClose:
         {!celebrating && choice === 0 && <>
           <p className="choice-stage-kicker">surprise one · make a clean little swipe</p>
           <h2 id="choice-surprise-title">Slice the cake</h2>
-          <p className="choice-stage-hint">Drag across the cake with your finger or mouse. One brave cut is all it takes.</p>
+          <p className="choice-stage-hint">Drag across the cake with your finger or mouse. One brave cut is all it takes.</p><button className="sound-test" onClick={enableBirthdaySound}>Tap to test sound</button>
           <div className={`interactive-cake ${sliced ? "is-sliced" : ""}`} onPointerDown={() => setCutting(true)} onPointerMove={(event) => { if (cutting && event.clientX > event.currentTarget.getBoundingClientRect().left + event.currentTarget.getBoundingClientRect().width * 0.58) completeSlice(); }} onPointerUp={() => setCutting(false)} onPointerCancel={() => setCutting(false)} role="button" tabIndex={0} aria-label="Drag across the cake to slice it" onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") completeSlice(); }}><div className="cake-top"><span className="cake-berry berry-a" /><span className="cake-berry berry-b" /><span className="cake-cream" /></div><div className="cake-body"><span /></div><div className="cake-knife" aria-hidden="true" /></div>
         </>}
         {!celebrating && choice === 1 && <>
           <p className="choice-stage-kicker">surprise two · make a wish</p>
           <h2 id="choice-surprise-title">Blow out the candle</h2>
-          <p className="choice-stage-hint">Tap or click the candle {Math.max(0, 3 - blows)} more {Math.max(0, 3 - blows) === 1 ? "time" : "times"} to send the flame away.</p>
+          <p className="choice-stage-hint">Tap or click the candle {Math.max(0, 3 - blows)} more {Math.max(0, 3 - blows) === 1 ? "time" : "times"} to send the flame away.</p><button className="sound-test" onClick={enableBirthdaySound}>Tap to test sound</button>
           <button className={`interactive-cake candle-cake ${blows >= 3 ? "is-blown" : ""}`} onClick={blowCandle} aria-label={`Blow out candle, ${blows} of 3 taps complete`}><span className="candle-flame" /><span className="candle-stick" /><div className="cake-top"><span className="cake-berry berry-a" /><span className="cake-cream" /></div><div className="cake-body"><span /></div></button>
           <div className="blow-dots" aria-label={`${blows} of 3 candle taps complete`}>{[0, 1, 2].map((dot) => <i key={dot} className={dot < blows ? "is-done" : ""} />)}</div>
         </>}
@@ -251,7 +286,10 @@ export default function Home() {
   const isOpen = opened.includes(current);
 
   const unlock = () => {
-    if (!isOpen) setOpened((items) => [...items, current]);
+    if (!isOpen) {
+      setOpened((items) => [...items, current]);
+      playBirthdayTone(unwrapToneForChapter(chapter.type));
+    }
     setRevealChapter(current);
     if (chapter.type === "finale") setIsCelebrating(true);
   };
@@ -332,7 +370,7 @@ export default function Home() {
                     <AnimatePresence mode="wait">
                       {chapter.type === "envelope" && <motion.button key="envelope" onClick={unlock} aria-label={isOpen ? "Envelope opened" : "Open envelope"} className="relative z-10 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nylo-berry focus-visible:ring-offset-8 focus-visible:ring-offset-nylo-blush"><Envelope open={isOpen} /></motion.button>}
                       {chapter.type === "memory" && <motion.div key="memory" className="relative w-full max-w-[330px] rotate-[-4deg] rounded-sm bg-[#f9eadf] p-3 shadow-[0_22px_30px_rgba(117,54,67,0.16)]"><div className="relative aspect-[4/3] overflow-hidden bg-nylo-peach"><img src={heroImage} alt="Pink birthday stationery" className="h-full w-full object-cover mix-blend-multiply opacity-80" /><div className="absolute inset-0 bg-nylo-rose/10" /></div><div className="px-3 pb-2 pt-4 font-display text-2xl italic text-nylo-berry">keep the ordinary magic</div><button onClick={unlock} className="absolute inset-0 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nylo-berry focus-visible:ring-offset-4" aria-label={isOpen ? "Memory opened" : "Open memory"} /></motion.div>}
-                      {chapter.type === "choice" && <div key="choice" className="relative grid w-full max-w-[390px] grid-cols-3 gap-3 sm:gap-5">{choiceLines.map((_, index) => <motion.button key={index} onClick={() => { setSelectedChoice(index); if (!isOpen) setOpened((items) => [...items, current]); setChoiceSurprise(index); }} whileHover={{ y: -10, rotate: index === 1 ? 0 : index === 0 ? -3 : 3 }} whileTap={{ scale: 0.96 }} className={`group relative aspect-[0.72] rounded-[1.2rem] border-2 p-2 shadow-[0_16px_25px_rgba(117,54,67,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nylo-berry ${selectedChoice === index ? "border-nylo-berry bg-nylo-berry" : "border-nylo-rose/20 bg-[#fff9f2]"}`}><div className={`flex h-full items-center justify-center rounded-[0.85rem] border border-dashed ${selectedChoice === index ? "border-white/35 text-white" : "border-nylo-rose/30 text-nylo-rose"}`}><span className="font-display text-4xl italic">{String.fromCharCode(65 + index)}</span></div><span className={`absolute -bottom-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 font-sans text-[10px] font-bold uppercase tracking-[0.15em] shadow-sm ${selectedChoice === index ? "bg-nylo-berry text-white" : "bg-white text-nylo-rose"}`}>{selectedChoice === index ? "chosen" : "pick me"}</span></motion.button>)}</div>}
+                      {chapter.type === "choice" && <div key="choice" className="relative grid w-full max-w-[390px] grid-cols-3 gap-3 sm:gap-5">{choiceLines.map((_, index) => <motion.button key={index} onClick={() => { setSelectedChoice(index); if (!isOpen) { setOpened((items) => [...items, current]); playBirthdayTone(unwrapToneForChapter(chapter.type)); } setChoiceSurprise(index); }} whileHover={{ y: -10, rotate: index === 1 ? 0 : index === 0 ? -3 : 3 }} whileTap={{ scale: 0.96 }} className={`group relative aspect-[0.72] rounded-[1.2rem] border-2 p-2 shadow-[0_16px_25px_rgba(117,54,67,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nylo-berry ${selectedChoice === index ? "border-nylo-berry bg-nylo-berry" : "border-nylo-rose/20 bg-[#fff9f2]"}`}><div className={`flex h-full items-center justify-center rounded-[0.85rem] border border-dashed ${selectedChoice === index ? "border-white/35 text-white" : "border-nylo-rose/30 text-nylo-rose"}`}><span className="font-display text-4xl italic">{String.fromCharCode(65 + index)}</span></div><span className={`absolute -bottom-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 font-sans text-[10px] font-bold uppercase tracking-[0.15em] shadow-sm ${selectedChoice === index ? "bg-nylo-berry text-white" : "bg-white text-nylo-rose"}`}>{selectedChoice === index ? "chosen" : "pick me"}</span></motion.button>)}</div>}
                       {chapter.type === "gift" && <motion.button key="gift" onClick={unlock} aria-label={isOpen ? "Gift opened" : "Open gift"} className="relative z-10 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nylo-berry focus-visible:ring-offset-8 focus-visible:ring-offset-nylo-blush"><WrappedGift open={isOpen} /></motion.button>}
                       {chapter.type === "finale" && <motion.div key="finale" className="relative flex flex-col items-center"><img src={finaleImage} alt="Pink birthday gift with confetti" className="relative z-10 max-h-[350px] w-full object-contain drop-shadow-[0_22px_18px_rgba(117,54,67,0.16)]" /><button onClick={unlock} className="relative z-20 -mt-2 rounded-full bg-nylo-berry px-5 py-2.5 font-sans text-xs font-bold uppercase tracking-[0.14em] text-white shadow-lg transition hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nylo-berry focus-visible:ring-offset-4">Make a wish</button></motion.div>}
                     </AnimatePresence>
