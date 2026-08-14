@@ -240,3 +240,51 @@ button:active { transform: scale(0.97); }
   .surprise-lid { transform: rotate(-28deg) translate(-12%, -42%); }
   .surprise-glow { opacity: 0.42; }
 }
+
+/* Local choice surprises: tactile cake stages and celebratory birthday reveals. */
+.choice-overlay { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; overflow: hidden; padding: 1.5rem; background: rgba(45, 26, 33, 0.9); backdrop-filter: blur(14px); }
+.choice-overlay::before { content: ""; position: absolute; inset: 0; opacity: 0.14; background-image: radial-gradient(#fff9f2 0.8px, transparent 0.8px); background-size: 9px 9px; }
+.choice-stage { position: relative; z-index: 2; width: min(660px, 94vw); min-height: min(600px, 82svh); display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; padding: clamp(1.5rem, 5vw, 4rem); border: 1px solid rgba(255, 249, 242, 0.28); border-radius: 34px 8px 30px 10px; color: #fff9f2; background: linear-gradient(145deg, rgba(145, 53, 81, 0.8), rgba(65, 35, 46, 0.84)); box-shadow: 0 30px 100px rgba(26, 12, 18, 0.5); text-align: center; }
+.choice-stage-kicker, .choice-celebration-kicker { margin: 0; color: #f6cdbd; font-family: "Manrope", sans-serif; font-size: 0.66rem; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; }
+.choice-stage h2 { position: relative; z-index: 3; margin: 0.75rem 0 0; color: #fff9f2; font-family: "DM Serif Display", Georgia, serif; font-size: clamp(2.5rem, 7vw, 5.6rem); font-style: italic; line-height: 0.9; letter-spacing: -0.055em; }
+.choice-stage-hint { position: relative; z-index: 3; max-width: 32rem; margin: 1rem auto 0; color: rgba(255, 249, 242, 0.78); font-family: "Manrope", sans-serif; font-size: 0.92rem; line-height: 1.6; }
+.interactive-cake { position: relative; z-index: 3; width: min(330px, 76vw); height: 230px; margin-top: 2rem; border: 0; background: transparent; cursor: crosshair; touch-action: none; filter: drop-shadow(0 20px 18px rgba(34, 16, 22, 0.28)); transition: transform 240ms cubic-bezier(0.23, 1, 0.32, 1); }
+.interactive-cake:hover { transform: translateY(-5px) rotate(-1deg); }
+.cake-body { position: absolute; left: 12%; right: 12%; bottom: 10%; height: 46%; border: 2px solid rgba(122, 48, 70, 0.35); border-radius: 20px 20px 30px 30px; background: repeating-linear-gradient(0deg, #e98f8d 0 17px, #f8b2a7 17px 22px); box-shadow: inset 0 -12px 0 rgba(168, 63, 84, 0.18); }
+.cake-body::after { content: ""; position: absolute; left: 9%; right: 9%; bottom: -13px; height: 22px; border-radius: 50%; background: #f6cdbd; }
+.cake-body span { position: absolute; left: 7%; right: 10%; top: 18%; height: 12px; border-radius: 999px; background: #fff1e8; opacity: 0.9; }
+.cake-top { position: absolute; z-index: 2; left: 12%; right: 12%; top: 26%; height: 82px; border-radius: 50%; border: 2px solid rgba(122, 48, 70, 0.28); background: #f5b7ae; box-shadow: inset 0 -10px 0 rgba(255, 241, 232, 0.4); }
+.cake-cream { position: absolute; left: 16%; right: 16%; top: 40%; height: 18px; border-radius: 50%; background: #fff1e8; box-shadow: 42px -7px 0 -2px #fff1e8, 87px 4px 0 -1px #fff1e8; }
+.cake-berry { position: absolute; z-index: 2; width: 17px; height: 17px; border-radius: 50% 50% 45% 45%; background: #b94e68; box-shadow: inset -3px -2px 0 rgba(96, 33, 52, 0.3); }
+.cake-berry::after { content: ""; position: absolute; left: 6px; top: -7px; width: 7px; height: 8px; border-radius: 100% 0; background: #6b8e62; transform: rotate(-25deg); }
+.berry-a { left: 25%; top: 20%; }.berry-b { right: 25%; top: 32%; }
+.cake-knife { position: absolute; z-index: 4; left: 12%; top: 5%; width: 130px; height: 4px; border-radius: 999px; background: #fff9f2; box-shadow: 0 0 0 2px rgba(246, 205, 189, 0.2); transform: rotate(25deg); transform-origin: left center; opacity: 0.6; transition: 220ms ease-out; }
+.interactive-cake:hover .cake-knife { transform: rotate(15deg) translateX(18px); opacity: 1; }
+.interactive-cake.is-sliced .cake-knife { transform: rotate(-17deg) translate(120px, 70px); opacity: 0; }
+.interactive-cake.is-sliced .cake-body { animation: cake-slice 580ms cubic-bezier(0.23, 1, 0.32, 1) forwards; }
+@keyframes cake-slice { 50% { transform: translateX(-9px) rotate(-2deg); } 100% { transform: translateX(-4px); } }
+.candle-stick { position: absolute; z-index: 5; left: 48%; top: 1%; width: 21px; height: 76px; border-radius: 7px 7px 3px 3px; background: repeating-linear-gradient(135deg, #f6cdbd 0 8px, #b94e68 8px 13px); box-shadow: 0 0 0 2px rgba(255, 249, 242, 0.22); }
+.candle-flame { position: absolute; z-index: 6; left: 48.1%; top: -26px; width: 20px; height: 31px; border-radius: 50% 50% 50% 0; background: #ffd36e; box-shadow: 0 0 20px 8px rgba(255, 211, 110, 0.34); transform: rotate(-45deg); animation: flame-flicker 700ms ease-in-out infinite alternate; transition: 260ms ease-out; }
+.candle-cake.is-blown .candle-flame { opacity: 0; transform: translateY(-25px) scale(0.2) rotate(-45deg); }
+@keyframes flame-flicker { from { transform: rotate(-43deg) scale(0.95); } to { transform: rotate(-50deg) scale(1.08); } }
+.blow-dots { position: relative; z-index: 3; display: flex; gap: 0.45rem; margin-top: 0.8rem; }
+.blow-dots i { width: 9px; height: 9px; border-radius: 50%; border: 1px solid #f6cdbd; background: transparent; transition: 180ms ease-out; }
+.blow-dots i.is-done { background: #f6cdbd; box-shadow: 0 0 12px rgba(246, 205, 189, 0.8); }
+.choice-celebration { position: relative; z-index: 5; width: 100%; text-align: center; }
+.choice-celebration h2 { position: relative; z-index: 4; margin: 0.75rem 0; color: #f6cdbd; font-family: "DM Serif Display", Georgia, serif; font-size: clamp(3rem, 9vw, 7.5rem); font-style: italic; text-shadow: 0 4px 0 rgba(104, 31, 52, 0.26), 0 0 28px rgba(246, 205, 189, 0.28); }
+.choice-celebration > p:last-child { position: relative; z-index: 4; margin: 0 auto; max-width: 28rem; color: rgba(255, 249, 242, 0.86); font-family: "Manrope", sans-serif; line-height: 1.7; }
+.choice-confetti { position: absolute; inset: -50vh -10vw; overflow: hidden; pointer-events: none; }
+.choice-confetti span { position: absolute; top: -1rem; width: 9px; height: 18px; border-radius: 2px; background: #f6cdbd; animation: confetti-fall 2.2s linear infinite; }
+.choice-confetti span:nth-child(3n) { background: #f5b7ae; }.choice-confetti span:nth-child(3n+1) { background: #f9e4bf; }.choice-confetti span:nth-child(4n) { width: 6px; height: 12px; border-radius: 50%; background: #b94e68; }
+@keyframes confetti-fall { 0% { transform: translateY(-12vh) rotate(0); opacity: 0; } 15% { opacity: 1; } 100% { transform: translateY(115vh) rotate(620deg); opacity: 0.2; } }
+.choice-balloons { position: absolute; inset: 0; pointer-events: none; }
+.choice-balloons i { position: absolute; bottom: -8%; width: 48px; height: 62px; border-radius: 50% 50% 46% 46%; background: #f6cdbd; box-shadow: inset -9px -7px 0 rgba(185, 78, 104, 0.16); animation: balloon-rise 5.2s ease-in-out infinite; }
+.choice-balloons i::after { content: ""; position: absolute; left: 50%; top: 98%; width: 1px; height: 120px; background: rgba(246, 205, 189, 0.55); }
+.choice-balloons i:nth-child(1) { left: 5%; animation-delay: 0s; }.choice-balloons i:nth-child(2) { right: 8%; width: 56px; height: 74px; background: #b94e68; animation-delay: 0.9s; }.choice-balloons i:nth-child(3) { left: 18%; width: 31px; height: 43px; background: #f5b7ae; animation-delay: 1.8s; }.choice-balloons i:nth-child(4) { right: 22%; width: 36px; height: 50px; background: #f9e4bf; animation-delay: 2.4s; }
+@keyframes balloon-rise { 0%, 100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-22px) rotate(6deg); } }
+.wrong-choice { position: relative; z-index: 4; max-width: 28rem; text-align: center; }.wrong-choice > span { display: block; margin-bottom: 1rem; color: #f6cdbd; font-size: 2rem; }.wrong-choice h2 { margin-top: 0.8rem; }.wrong-choice p:not(.choice-stage-kicker) { color: rgba(255, 249, 242, 0.86); font-family: "Manrope", sans-serif; line-height: 1.7; }.wrong-sound { display: block; margin: 1rem auto 0; border: 0; color: rgba(255, 249, 242, 0.55); background: transparent; font-family: "Manrope", sans-serif; font-size: 0.66rem; text-decoration: underline; }
+@media (max-width: 640px) { .choice-overlay { padding: 0.75rem; }.choice-stage { min-height: 88svh; border-radius: 26px 8px 24px 10px; }.interactive-cake { margin-top: 1.3rem; transform: scale(0.9); }.choice-stage h2 { font-size: clamp(2.65rem, 13vw, 4.5rem); }.choice-balloons i { transform: scale(0.75); } }
+@media (prefers-reduced-motion: reduce) { .candle-flame, .choice-confetti span, .choice-balloons i { animation: none; }.choice-confetti span { opacity: 0.6; }.choice-balloons i { bottom: 5%; } }
+
+/* Keep the three choice reveal compositions on the same heading-to-copy rhythm. */
+.choice-stage h2 + .choice-stage-hint { margin-top: 1.55rem; }

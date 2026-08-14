@@ -113,6 +113,84 @@ function FloatingMarks({ count = 14 }: { count?: number }) {
   );
 }
 
+function playBirthdayTone(kind: "slice" | "pop" | "wrong") {
+  if (typeof window === "undefined") return;
+  const AudioContextClass = window.AudioContext || (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+  if (!AudioContextClass) return;
+  const context = new AudioContextClass();
+  const notes = kind === "slice" ? [392, 523, 659] : kind === "pop" ? [330, 440, 587] : [220, 175];
+  notes.forEach((frequency, index) => {
+    const oscillator = context.createOscillator();
+    const gain = context.createGain();
+    oscillator.type = kind === "wrong" ? "triangle" : "sine";
+    oscillator.frequency.value = frequency;
+    gain.gain.setValueAtTime(0.0001, context.currentTime + index * 0.08);
+    gain.gain.exponentialRampToValueAtTime(0.08, context.currentTime + index * 0.08 + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + index * 0.08 + 0.22);
+    oscillator.connect(gain).connect(context.destination);
+    oscillator.start(context.currentTime + index * 0.08);
+    oscillator.stop(context.currentTime + index * 0.08 + 0.24);
+  });
+  window.setTimeout(() => void context.close(), 700);
+}
+
+function CelebrationBurst({ message, subline, reduced }: { message: string; subline: string; reduced: boolean | null }) {
+  return (
+    <motion.div className="choice-celebration" initial={{ opacity: 0, scale: 0.7 }} animate={{ opacity: 1, scale: 1 }} transition={{ type: "spring", stiffness: 160, damping: 14 }}>
+      <div className="choice-confetti" aria-hidden="true">{Array.from({ length: 34 }, (_, index) => <span key={index} style={{ left: `${(index * 29) % 100}%`, animationDelay: `${(index % 10) * 0.06}s`, animationDuration: `${reduced ? 0.01 : 1.8 + (index % 5) * 0.18}s` }} />)}</div>
+      <div className="choice-balloons" aria-hidden="true"><i /><i /><i /><i /></div>
+      <p className="choice-celebration-kicker">a little birthday magic</p>
+      <h2>{message}</h2>
+      <p>{subline}</p>
+    </motion.div>
+  );
+}
+
+function ChoiceSurprise({ choice, onClose, reduced }: { choice: number; onClose: () => void; reduced: boolean | null }) {
+  const [sliced, setSliced] = useState(false);
+  const [cutting, setCutting] = useState(false);
+  const [blows, setBlows] = useState(0);
+  const [celebrating, setCelebrating] = useState(false);
+
+  const completeSlice = () => {
+    if (sliced) return;
+    setSliced(true);
+    setCelebrating(true);
+    playBirthdayTone("slice");
+  };
+
+  const blowCandle = () => {
+    if (celebrating) return;
+    const next = blows + 1;
+    setBlows(next);
+    playBirthdayTone("pop");
+    if (next >= 3) setCelebrating(true);
+  };
+
+  return (
+    <motion.div className="choice-overlay" role="dialog" aria-modal="true" aria-labelledby="choice-surprise-title" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+      <button className="surprise-dismiss" onClick={onClose} aria-label="Close choice surprise">×</button>
+      <div className="choice-stage">
+        {!celebrating && choice === 0 && <>
+          <p className="choice-stage-kicker">surprise one · make a clean little swipe</p>
+          <h2 id="choice-surprise-title">Slice the cake</h2>
+          <p className="choice-stage-hint">Drag across the cake with your finger or mouse. One brave cut is all it takes.</p>
+          <div className={`interactive-cake ${sliced ? "is-sliced" : ""}`} onPointerDown={() => setCutting(true)} onPointerMove={(event) => { if (cutting && event.clientX > event.currentTarget.getBoundingClientRect().left + event.currentTarget.getBoundingClientRect().width * 0.58) completeSlice(); }} onPointerUp={() => setCutting(false)} onPointerCancel={() => setCutting(false)} role="button" tabIndex={0} aria-label="Drag across the cake to slice it" onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") completeSlice(); }}><div className="cake-top"><span className="cake-berry berry-a" /><span className="cake-berry berry-b" /><span className="cake-cream" /></div><div className="cake-body"><span /></div><div className="cake-knife" aria-hidden="true" /></div>
+        </>}
+        {!celebrating && choice === 1 && <>
+          <p className="choice-stage-kicker">surprise two · make a wish</p>
+          <h2 id="choice-surprise-title">Blow out the candle</h2>
+          <p className="choice-stage-hint">Tap or click the candle {Math.max(0, 3 - blows)} more {Math.max(0, 3 - blows) === 1 ? "time" : "times"} to send the flame away.</p>
+          <button className={`interactive-cake candle-cake ${blows >= 3 ? "is-blown" : ""}`} onClick={blowCandle} aria-label={`Blow out candle, ${blows} of 3 taps complete`}><span className="candle-flame" /><span className="candle-stick" /><div className="cake-top"><span className="cake-berry berry-a" /><span className="cake-cream" /></div><div className="cake-body"><span /></div></button>
+          <div className="blow-dots" aria-label={`${blows} of 3 candle taps complete`}>{[0, 1, 2].map((dot) => <i key={dot} className={dot < blows ? "is-done" : ""} />)}</div>
+        </>}
+        {!celebrating && choice === 2 && <div className="wrong-choice"><span>✦</span><p className="choice-stage-kicker">surprise three</p><h2 id="choice-surprise-title">Oooopppsss…</h2><p className="choice-stage-hint">No surprises for you here, try either the first or second pocket. HEHE</p><button onClick={onClose} className="reveal-close">Try another pocket <ArrowRight size={16} /></button></div>}
+        {celebrating && <><CelebrationBurst reduced={reduced} message={choice === 0 ? "Happy Birthday!" : "Yaaaayyyy!"} subline={choice === 0 ? "A sweet little slice of joy, made especially for you." : "The candle is out—and your wish is officially in the air."} /><button onClick={onClose} className="reveal-close">Keep the magic <ArrowRight size={16} /></button></>}
+      </div>
+    </motion.div>
+  );
+}
+
 function Envelope({ open, small = false }: { open: boolean; small?: boolean }) {
   return (
     <motion.div className={`envelope ${small ? "envelope-small" : ""} ${open ? "is-open" : ""}`} animate={open ? { y: -8, rotate: -1 } : { y: 0, rotate: 0 }} transition={{ type: "spring", stiffness: 260, damping: 18 }}>
@@ -168,6 +246,7 @@ export default function Home() {
   const [selectedChoice, setSelectedChoice] = useState<number | null>(null);
   const [isCelebrating, setIsCelebrating] = useState(false);
   const [revealChapter, setRevealChapter] = useState<number | null>(null);
+  const [choiceSurprise, setChoiceSurprise] = useState<number | null>(null);
   const chapter = chapters[current];
   const isOpen = opened.includes(current);
 
@@ -198,6 +277,7 @@ export default function Home() {
   return (
     <main className="min-h-screen overflow-hidden bg-nylo-paper text-nylo-ink">
       <AnimatePresence>{revealChapter !== null && <SurpriseReveal chapter={chapters[revealChapter]} reduced={prefersReducedMotion} onClose={() => setRevealChapter(null)} />}</AnimatePresence>
+      <AnimatePresence>{choiceSurprise !== null && <ChoiceSurprise choice={choiceSurprise} reduced={prefersReducedMotion} onClose={() => setChoiceSurprise(null)} />}</AnimatePresence>
       <section className="relative min-h-[100svh] border-b border-nylo-rose/15">
         <FloatingMarks count={18} />
         <div className="relative mx-auto flex min-h-[100svh] max-w-[1440px] flex-col px-6 py-6 sm:px-10 lg:px-16">
@@ -252,7 +332,7 @@ export default function Home() {
                     <AnimatePresence mode="wait">
                       {chapter.type === "envelope" && <motion.button key="envelope" onClick={unlock} aria-label={isOpen ? "Envelope opened" : "Open envelope"} className="relative z-10 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nylo-berry focus-visible:ring-offset-8 focus-visible:ring-offset-nylo-blush"><Envelope open={isOpen} /></motion.button>}
                       {chapter.type === "memory" && <motion.div key="memory" className="relative w-full max-w-[330px] rotate-[-4deg] rounded-sm bg-[#f9eadf] p-3 shadow-[0_22px_30px_rgba(117,54,67,0.16)]"><div className="relative aspect-[4/3] overflow-hidden bg-nylo-peach"><img src={heroImage} alt="Pink birthday stationery" className="h-full w-full object-cover mix-blend-multiply opacity-80" /><div className="absolute inset-0 bg-nylo-rose/10" /></div><div className="px-3 pb-2 pt-4 font-display text-2xl italic text-nylo-berry">keep the ordinary magic</div><button onClick={unlock} className="absolute inset-0 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nylo-berry focus-visible:ring-offset-4" aria-label={isOpen ? "Memory opened" : "Open memory"} /></motion.div>}
-                      {chapter.type === "choice" && <div key="choice" className="relative grid w-full max-w-[390px] grid-cols-3 gap-3 sm:gap-5">{choiceLines.map((_, index) => <motion.button key={index} onClick={() => { setSelectedChoice(index); if (!isOpen) setOpened((items) => [...items, current]); setRevealChapter(current); }} whileHover={{ y: -10, rotate: index === 1 ? 0 : index === 0 ? -3 : 3 }} whileTap={{ scale: 0.96 }} className={`group relative aspect-[0.72] rounded-[1.2rem] border-2 p-2 shadow-[0_16px_25px_rgba(117,54,67,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nylo-berry ${selectedChoice === index ? "border-nylo-berry bg-nylo-berry" : "border-nylo-rose/20 bg-[#fff9f2]"}`}><div className={`flex h-full items-center justify-center rounded-[0.85rem] border border-dashed ${selectedChoice === index ? "border-white/35 text-white" : "border-nylo-rose/30 text-nylo-rose"}`}><span className="font-display text-4xl italic">{String.fromCharCode(65 + index)}</span></div><span className={`absolute -bottom-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 font-sans text-[10px] font-bold uppercase tracking-[0.15em] shadow-sm ${selectedChoice === index ? "bg-nylo-berry text-white" : "bg-white text-nylo-rose"}`}>{selectedChoice === index ? "chosen" : "pick me"}</span></motion.button>)}</div>}
+                      {chapter.type === "choice" && <div key="choice" className="relative grid w-full max-w-[390px] grid-cols-3 gap-3 sm:gap-5">{choiceLines.map((_, index) => <motion.button key={index} onClick={() => { setSelectedChoice(index); if (!isOpen) setOpened((items) => [...items, current]); setChoiceSurprise(index); }} whileHover={{ y: -10, rotate: index === 1 ? 0 : index === 0 ? -3 : 3 }} whileTap={{ scale: 0.96 }} className={`group relative aspect-[0.72] rounded-[1.2rem] border-2 p-2 shadow-[0_16px_25px_rgba(117,54,67,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nylo-berry ${selectedChoice === index ? "border-nylo-berry bg-nylo-berry" : "border-nylo-rose/20 bg-[#fff9f2]"}`}><div className={`flex h-full items-center justify-center rounded-[0.85rem] border border-dashed ${selectedChoice === index ? "border-white/35 text-white" : "border-nylo-rose/30 text-nylo-rose"}`}><span className="font-display text-4xl italic">{String.fromCharCode(65 + index)}</span></div><span className={`absolute -bottom-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 font-sans text-[10px] font-bold uppercase tracking-[0.15em] shadow-sm ${selectedChoice === index ? "bg-nylo-berry text-white" : "bg-white text-nylo-rose"}`}>{selectedChoice === index ? "chosen" : "pick me"}</span></motion.button>)}</div>}
                       {chapter.type === "gift" && <motion.button key="gift" onClick={unlock} aria-label={isOpen ? "Gift opened" : "Open gift"} className="relative z-10 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nylo-berry focus-visible:ring-offset-8 focus-visible:ring-offset-nylo-blush"><WrappedGift open={isOpen} /></motion.button>}
                       {chapter.type === "finale" && <motion.div key="finale" className="relative flex flex-col items-center"><img src={finaleImage} alt="Pink birthday gift with confetti" className="relative z-10 max-h-[350px] w-full object-contain drop-shadow-[0_22px_18px_rgba(117,54,67,0.16)]" /><button onClick={unlock} className="relative z-20 -mt-2 rounded-full bg-nylo-berry px-5 py-2.5 font-sans text-xs font-bold uppercase tracking-[0.14em] text-white shadow-lg transition hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nylo-berry focus-visible:ring-offset-4">Make a wish</button></motion.div>}
                     </AnimatePresence>
