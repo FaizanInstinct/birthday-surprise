@@ -99,15 +99,13 @@ function FloatingMarks({ count = 14 }: { count?: number }) {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
       {marks.map((mark) => (
-        <motion.span
+        <span
           key={mark.id}
-          className="absolute text-nylo-rose/35"
-          style={{ left: mark.left, top: mark.top, scale: mark.scale, animationDelay: mark.delay }}
-          animate={{ y: [0, -12, 0], rotate: [0, 10, -4, 0], opacity: [0.3, 0.75, 0.3] }}
-          transition={{ duration: 5 + (mark.id % 4), repeat: Infinity, ease: "easeInOut", delay: mark.id * 0.16 }}
+          className="floating-mark absolute text-nylo-rose/35"
+          style={{ left: mark.left, top: mark.top, scale: mark.scale, animationDelay: `${mark.id * 0.16 + (mark.id % 5) * 0.65}s`, animationDuration: `${5 + (mark.id % 4)}s` }}
         >
           {mark.id % 3 === 0 ? <Sparkles size={20} /> : mark.id % 3 === 1 ? <Star size={16} /> : <Heart size={14} />}
-        </motion.span>
+        </span>
       ))}
     </div>
   );

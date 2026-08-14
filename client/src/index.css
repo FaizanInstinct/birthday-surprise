@@ -301,3 +301,10 @@ button:active { transform: scale(0.97); }
 .sorry-rain span:nth-child(3) { left: 66%; }
 .sorry-rain span:nth-child(4) { left: 84%; color: rgba(230, 139, 107, 0.42); }
 .wrong-choice > :not(.sorry-rain) { position: relative; z-index: 1; }
+
+/* Performance pass: preserve the floating marks while moving their infinite drift to CSS/compositor work. */
+.floating-mark { contain: layout paint; will-change: transform, opacity; animation-name: floating-mark-drift; animation-timing-function: ease-in-out; animation-iteration-count: infinite; }
+@keyframes floating-mark-drift { 0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 0.3; } 50% { transform: translate3d(0, -12px, 0) rotate(10deg); opacity: 0.75; } 75% { transform: translate3d(0, -4px, 0) rotate(-4deg); opacity: 0.3; } }
+.keepsake-stage { contain: layout paint; }
+.choice-confetti, .choice-balloons { contain: paint; }
+@media (prefers-reduced-motion: reduce) { .floating-mark { animation: none; opacity: 0.45; } }
