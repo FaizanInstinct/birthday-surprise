@@ -226,17 +226,31 @@ button:active { transform: scale(0.97); }
 .reveal-note h2 { font-family: "DM Serif Display", Georgia, serif; color: #fff9f2; }
 .reveal-finale { border-radius: 50%; padding: clamp(3rem, 8vw, 6rem); background: rgba(185, 78, 104, 0.66); }
 .reveal-finale h2 { font-family: "DM Serif Display", Georgia, serif; font-style: italic; color: #fff9f2; }
+.faruu-surprise-overlay { background: rgba(44, 28, 33, 0.88); }
+.faruu-surprise-overlay .surprise-box { opacity: 0.34; }
+.faruu-emoji-rain { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+.faruu-emoji-rain span { position: absolute; top: -3rem; font-size: clamp(1.2rem, 2.6vw, 2.2rem); filter: drop-shadow(0 2px 8px rgba(242, 166, 169, 0.3)); }
+.reveal-faruu { width: min(760px, 94vw); max-height: min(86svh, 780px); overflow-y: auto; border-radius: 34px 10px 32px 12px; padding: clamp(2rem, 6vw, 4.8rem); background: linear-gradient(145deg, rgba(142, 61, 85, 0.86), rgba(70, 36, 47, 0.78)); box-shadow: 0 34px 100px rgba(26, 12, 18, 0.58), inset 0 1px 0 rgba(255, 249, 242, 0.16); }
+.reveal-faruu::before { content: "♡"; top: 1.1rem; left: 1.5rem; color: #f6cdbd; font-size: 1.4rem; }
+.reveal-faruu::after { content: "✦"; right: 1.5rem; bottom: 1.1rem; color: #f6cdbd; font-size: 1.35rem; }
+.reveal-faruu h2 { max-width: 610px; margin-inline: auto; font-size: clamp(2.65rem, 7vw, 5.8rem); text-wrap: balance; }
+.reveal-faruu .reveal-copy { max-width: 39rem; font-size: clamp(0.98rem, 1.8vw, 1.16rem); line-height: 1.85; }
+.reveal-faruu .reveal-signoff { margin-top: 1.7rem; font-size: 1.45rem; }
 
 @media (max-width: 640px) {
   .surprise-overlay { padding: 1rem; }
   .surprise-box { top: 75%; width: 110vw; opacity: 0.28; }
   .reveal-message { max-height: 88svh; overflow-y: auto; }
   .reveal-finale { border-radius: 28px; }
+  .reveal-faruu { max-height: 88svh; padding: 2.2rem 1.35rem 2.5rem; border-radius: 28px 8px 26px 10px; }
+  .reveal-faruu h2 { font-size: clamp(2.5rem, 13vw, 4rem); }
+  .reveal-faruu .reveal-copy { font-size: 0.96rem; line-height: 1.72; }
   .reveal-note { text-align: center; }
   .reveal-note .reveal-rule, .reveal-note .reveal-eyebrow { justify-content: center; text-align: center; }
 }
 @media (prefers-reduced-motion: reduce) {
   .surprise-lid, .surprise-glow, .reveal-message { animation: none; }
+  .faruu-emoji-rain span { animation: none; }
   .surprise-lid { transform: rotate(-28deg) translate(-12%, -42%); }
   .surprise-glow { opacity: 0.42; }
 }

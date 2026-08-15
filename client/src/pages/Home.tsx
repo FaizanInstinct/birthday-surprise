@@ -2,7 +2,7 @@
  * Paper Moon Keepsake direction: tactile stationery, asymmetric intimacy, and motion as affection.
  * This page owns the one-session gift journey; replace the copy in `chapters` to personalize it.
  */
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import heroImage from "../assets/nylo-hero.webp";
 import finaleImage from "../assets/nylo-finale.webp";
 import markImage from "../assets/nylo-mark.webp";
@@ -82,6 +82,8 @@ const choiceLines = [
   "For the version of you that is still becoming.",
   "For all the good surprises still on their way.",
 ];
+
+const faruuWish = "Happy birthday, my Neelu🥹❤️ You’re not just my little sister, you’re one of my biggest emotional supports and someone I can always feel close to, even from far away. I honestly miss having you around more than I say. I hope life always keeps you happy, gives you beautiful moments, and brings you everything you wish for. No matter how far you are, you’ll always be my little one and someone very close to my heart. Love you endlessly. 🫶🏻🎂❤️😘";
 
 function FloatingMarks({ count = 14 }: { count?: number }) {
   const marks = useMemo(
@@ -260,6 +262,25 @@ function SurpriseReveal({ chapter, onClose, reduced }: { chapter: (typeof chapte
   );
 }
 
+function FaruuSurpriseReveal({ onClose, reduced }: { onClose: () => void; reduced: boolean | null }) {
+  return (
+    <motion.div className="surprise-overlay faruu-surprise-overlay" role="dialog" aria-modal="true" aria-labelledby="faruu-surprise-title" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reduced ? 0.01 : 0.35 }}>
+      <div className="rose-rain" aria-hidden="true">{Array.from({ length: 18 }, (_, index) => <motion.span key={index} style={{ left: `${(index * 37) % 100}%` }} initial={{ y: -40, opacity: 0, rotate: 0 }} animate={{ y: "115vh", opacity: [0, 1, 1, 0], rotate: 360 }} transition={{ duration: reduced ? 0.01 : 4.2 + (index % 4) * 0.7, repeat: Infinity, delay: index * 0.08, ease: "linear" }}>✿</motion.span>)}</div>
+      <div className="faruu-emoji-rain" aria-hidden="true">{Array.from({ length: 20 }, (_, index) => <motion.span key={index} style={{ left: `${(index * 29) % 100}%` }} initial={{ y: -50, opacity: 0, rotate: 0 }} animate={{ y: "115vh", opacity: [0, 1, 1, 0], rotate: (index % 2 ? 1 : -1) * 360 }} transition={{ duration: reduced ? 0.01 : 5 + (index % 5) * 0.45, repeat: Infinity, delay: 0.2 + index * 0.1, ease: "linear" }}>{["🎉", "🎈", "🎂", "✨", "💖"][index % 5]}</motion.span>)}</div>
+      <div className="surprise-box" aria-hidden="true"><div className="surprise-lid"><i /><i /></div><div className="surprise-body"><i /><i /></div><div className="surprise-glow" /></div>
+      <motion.div className="reveal-message reveal-finale reveal-faruu" initial={{ opacity: 0, y: reduced ? 0 : 24, scale: reduced ? 1 : 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: reduced ? 0.01 : 0.75, delay: reduced ? 0 : 0.2, ease: [0.23, 1, 0.32, 1] }}>
+        <p className="reveal-eyebrow">a birthday wish · from faruu</p>
+        <h2 id="faruu-surprise-title">Birthday Wish from Faruu ❤️</h2>
+        <div className="reveal-rule"><span>✦</span><i /><span>✦</span></div>
+        <p className="reveal-copy">{faruuWish}</p>
+        <p className="reveal-signoff">love you endlessly, always</p>
+        <button onClick={onClose} autoFocus className="reveal-close">Keep the magic <ArrowRight size={16} /></button>
+      </motion.div>
+      <button className="surprise-dismiss" onClick={onClose} aria-label="Close Faruu birthday wish">×</button>
+    </motion.div>
+  );
+}
+
 function WrappedGift({ open }: { open: boolean }) {
   return (
     <motion.div className={`wrapped-gift ${open ? "is-open" : ""}`} animate={open ? { y: -8, rotate: 1 } : { y: 0, rotate: 0 }} transition={{ type: "spring", stiffness: 250, damping: 17 }}>
@@ -280,6 +301,8 @@ export default function Home() {
   const [isCelebrating, setIsCelebrating] = useState(false);
   const [revealChapter, setRevealChapter] = useState<number | null>(null);
   const [choiceSurprise, setChoiceSurprise] = useState<number | null>(null);
+  const [showFaruuWish, setShowFaruuWish] = useState(false);
+  const swipeStartX = useRef<number | null>(null);
   const chapter = chapters[current];
   const isOpen = opened.includes(current);
 
@@ -292,11 +315,30 @@ export default function Home() {
     if (chapter.type === "finale") setIsCelebrating(true);
   };
 
+  const revealFaruuWish = () => {
+    if (!showFaruuWish) {
+      setShowFaruuWish(true);
+      playBirthdayTone("unwrap-finale");
+    }
+  };
+
+  const handleCatchPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    swipeStartX.current = event.clientX;
+  };
+
+  const handleCatchPointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (swipeStartX.current !== null && event.clientX - swipeStartX.current > 70) {
+      revealFaruuWish();
+    }
+    swipeStartX.current = null;
+  };
+
   const goNext = () => {
     setIsCelebrating(false);
     if (current < chapters.length - 1) {
       setCurrent((value) => value + 1);
       setSelectedChoice(null);
+      setShowFaruuWish(false);
       window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" });
     }
   };
@@ -306,6 +348,7 @@ export default function Home() {
       setCurrent(index);
       setIsCelebrating(false);
       setSelectedChoice(null);
+      setShowFaruuWish(false);
       window.scrollTo({ top: 0, behavior: "auto" });
     }
   };
@@ -314,6 +357,7 @@ export default function Home() {
     <main className="min-h-screen overflow-hidden bg-nylo-paper text-nylo-ink">
       <AnimatePresence>{revealChapter !== null && <SurpriseReveal chapter={chapters[revealChapter]} reduced={prefersReducedMotion} onClose={() => setRevealChapter(null)} />}</AnimatePresence>
       <AnimatePresence>{choiceSurprise !== null && <ChoiceSurprise choice={choiceSurprise} reduced={prefersReducedMotion} onClose={() => setChoiceSurprise(null)} />}</AnimatePresence>
+      <AnimatePresence>{showFaruuWish && <FaruuSurpriseReveal reduced={prefersReducedMotion} onClose={() => setShowFaruuWish(false)} />}</AnimatePresence>
       <section className="relative min-h-[100svh] border-b border-nylo-rose/15">
         <FloatingMarks count={18} />
         <div className="relative mx-auto flex min-h-[100svh] max-w-[1440px] flex-col px-6 py-6 sm:px-10 lg:px-16">
@@ -380,7 +424,23 @@ export default function Home() {
                       {chapter.type === "choice" && selectedChoice !== null ? <><div className="mb-5 inline-flex items-center gap-2 rounded-full bg-nylo-peach/60 px-3 py-1.5 font-sans text-xs font-bold uppercase tracking-[0.16em] text-nylo-berry"><Sparkles size={13} /> pocket {String.fromCharCode(65 + selectedChoice)} opened</div><p className="font-display text-4xl leading-[1.05] text-nylo-ink sm:text-5xl">{choiceLines[selectedChoice]}</p><p className="mt-6 font-sans text-base leading-7 text-nylo-ink/65">You knew exactly where to look. Keep that little line with you today.</p></> : isOpen ? <><div className="mb-5 inline-flex items-center gap-2 rounded-full bg-nylo-peach/60 px-3 py-1.5 font-sans text-xs font-bold uppercase tracking-[0.16em] text-nylo-berry"><Check size={13} /> unwrapped</div><p className="font-display text-4xl leading-[1.05] text-nylo-ink sm:text-5xl">{chapter.message}</p></> : <><p className="font-display text-4xl leading-[1.05] text-nylo-ink/30 sm:text-5xl">A small surprise is waiting on the other side.</p><p className="mt-6 font-sans text-base leading-7 text-nylo-ink/55">Tap the {chapter.type === "gift" ? "gift" : "envelope"} when you are ready to open this chapter.</p></>}
                     </motion.div></AnimatePresence>
                     {(isOpen || (chapter.type === "choice" && selectedChoice !== null)) && current < chapters.length - 1 && <button onClick={goNext} className="group mt-9 inline-flex items-center gap-3 rounded-full bg-nylo-ink px-5 py-3 font-sans text-sm font-bold text-nylo-paper transition hover:-translate-y-1 hover:bg-nylo-berry active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nylo-berry focus-visible:ring-offset-4"><span>Open the next chapter</span><ArrowRight size={16} className="transition-transform group-hover:translate-x-1" /></button>}
-                    {current === chapters.length - 1 && isOpen && <p className="mt-8 font-display text-2xl italic text-nylo-rose">Make a beautiful wish, birthday girl.</p>}
+                    {current === chapters.length - 1 && isOpen && <>
+                      <p className="mt-8 font-display text-2xl italic text-nylo-rose">Make a beautiful wish, birthday girl.</p>
+                      <motion.div
+                        className="relative mt-10 overflow-hidden rounded-[1.7rem] border border-nylo-rose/20 bg-white/65 p-5 shadow-[0_18px_35px_rgba(117,54,67,0.1)] touch-pan-y"
+                        onPointerDown={handleCatchPointerDown}
+                        onPointerUp={handleCatchPointerUp}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.4 }}
+                      >
+                        <div className="pointer-events-none absolute -right-5 -top-6 rotate-12 text-4xl opacity-70" aria-hidden="true">🎂</div>
+                        <div className="pointer-events-none absolute -bottom-4 left-5 -rotate-12 text-3xl opacity-60" aria-hidden="true">🎈</div>
+                        <p className="font-sans text-[11px] font-bold uppercase tracking-[0.18em] text-nylo-rose">wait… there is one last catch!</p>
+                        <p className="mt-2 font-display text-2xl italic leading-tight text-nylo-ink">A little more love is waiting for you.</p>
+                        <button onClick={revealFaruuWish} className="mt-5 inline-flex items-center gap-2 rounded-full bg-nylo-berry px-4 py-2.5 font-sans text-xs font-bold uppercase tracking-[0.12em] text-white shadow-[0_10px_20px_rgba(142,61,85,0.2)] transition hover:-translate-y-0.5 hover:bg-nylo-rose active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nylo-berry focus-visible:ring-offset-4"><span>Click here or swipe right</span><ArrowRight size={15} /></button>
+                      </motion.div>
+                    </>}
                   </div>
                 </div>
               </motion.div>
